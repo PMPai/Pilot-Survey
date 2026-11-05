@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>智慧公民 AI 專案提案</title><link rel="stylesheet" href="/style.css"></head>
+<body><main>
+<header><div class="eyebrow">SMART CITIZEN · AI PoC</div><h1>員工 AI 改善專案提案表</h1><p>以現況與預期改善為核心，輔以效益估算及實施檢查點。</p></header>
+<section><h2>一、專案基本資料</h2><div class="grid">
+<label class="full">專案名稱<input id="name"></label>
+<label>提案部門<input id="dept"></label><label>提案員工<input id="owner"></label>
+<label>直屬主管<input id="supervisor"></label><label>提案日期<input type="date" id="proposalDate"></label>
+</div></section>
+<section><h2>二、目前狀況（As-Is）</h2><p class="hint">說明目前執行方式、使用系統、參與人員及主要問題。可另附流程圖。</p>
+<label>目前工作流程與執行方式<textarea id="asIs" rows="5"></textarea></label>
+<label>主要問題與瓶頸<textarea id="problems" rows="3"></textarea></label>
+<label>現況流程圖（選填，僅顯示檔名，不納入 Excel）<input id="diagram" type="file" accept="image/*,.pdf"></label><div id="diagramName" class="hint"></div>
+</section>
+<section><h2>三、預期狀況（To-Be）</h2>
+<label>AI 導入後的工作方式<textarea id="toBe" rows="5"></textarea></label>
+<label>預期改善目標<textarea id="goal" rows="3"></textarea></label></section>
+<section><h2>四、預期效益與資源</h2><p class="hint">數字為員工初步估算，後續在 PoC 中驗證；節省工時不必然等於現金收益。</p>
+<div class="grid">
+<label>目前每次處理時間（分鐘）<input type="number" min="0" id="currentTime"></label>
+<label>預期每次處理時間（分鐘）<input type="number" min="0" id="futureTime"></label>
+<label>每月執行次數<input type="number" min="0" id="frequency"></label>
+<label>預估年度新增成本（元）<input type="number" min="0" id="cost"></label>
+</div>
+<div class="metrics"><div><span>每次預估節省</span><strong id="saved">—</strong></div>
+<div><span>預估年度節省工時</span><strong id="hours">—</strong></div></div>
+<label>所需人員、工具、預算與主管支持<textarea id="resources" rows="3"></textarea></label>
+</section>
+<section><div class="sectionhead"><h2>五、實施節點與檢查點</h2><button type="button" id="add">＋ 新增節點</button></div>
+<p class="hint">這是專案實施里程碑，不是日常業務流程。每個節點記錄時間、工作事項與驗收標準。</p>
+<div class="tablewrap"><table><thead><tr><th>實施事項</th><th>預定完成日期</th><th>檢查點／驗收標準</th><th>檢查結果</th><th></th></tr></thead><tbody id="stages"></tbody></table></div></section>
+<section><h2>六、主管審核與批准</h2><p class="hint">提案須先與直屬主管討論。正式啟動 PoC 前，必須另取得高階管理層批准。本地表單的狀態欄不構成電子簽核。</p>
+<label>主管審核意見<textarea id="notes" rows="3"></textarea></label>
+<div class="grid"><label>主管審核狀態<select id="approval">
+<option>待主管審核</option><option>主管同意送審</option><option>需要修改</option></select></label>
+<label>高階管理層批准狀態<select id="executiveApproval">
+<option>待核准</option><option>已核准（須另有正式記錄）</option><option>退回</option>
+</select></label></div></section>
+<footer><div id="message" role="status"></div><button type="button" id="save">儲存到本機</button>
+<button type="button" id="export">匯出 Excel (.xlsx)</button>
+<button type="button" class="secondary" id="reset">重設範例</button>
+<p class="hint">資料儲存在目前瀏覽器的 localStorage；不會傳送至外部伺服器。請勿在共用電腦填入機密資料。</p></footer>
+</main><script src="/app.js"></script></body></html>
