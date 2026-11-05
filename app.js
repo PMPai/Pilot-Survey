@@ -12,5 +12,5 @@ $('add').onclick=()=>{stageRow();syncStages()};
 $('save').onclick=()=>{localStorage.setItem('smartCitizenPocV1',JSON.stringify(collect()));message('已儲存到本機瀏覽器。')};
 $('reset').onclick=()=>{if(confirm('重設為範例資料？未儲存的修改會遺失。')){load(sample);message('已重設範例。')}};
 $('diagram').onchange=()=>{$('diagramName').textContent=$('diagram').files[0]?.name||''};
-$('export').onclick=async()=>{try{const res=await fetch('/export',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(collect())});if(!res.ok)throw Error(await res.text());const blob=await res.blob(),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='智慧公民_AI專案提案.xlsx';a.click();setTimeout(()=>URL.revokeObjectURL(url),3000);message('Excel 已匯出。')}catch(e){message('匯出失敗：'+e.message)}};
+$('export').onclick=async()=>{try{const res=await fetch('/export',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(collect())});if(!res.ok)throw Error(await res.text());const blob=await res.blob(),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='骏驰公司测试项目说明书.xlsx';a.click();setTimeout(()=>URL.revokeObjectURL(url),3000);message('Excel 已匯出。')}catch(e){message('匯出失敗：'+e.message)}};
 try{load(JSON.parse(localStorage.getItem('smartCitizenPocV1'))||sample)}catch{load(sample)}
