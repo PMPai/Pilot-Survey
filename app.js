@@ -1,0 +1,16 @@
+const fields=['name','dept','owner','supervisor','proposalDate','asIs','problems','toBe','goal','currentTime','futureTime','frequency','cost','resources','notes','approval','executiveApproval'];
+const sample={name:'客戶詢價處理 AI 改善專案',dept:'業務部',owner:'',supervisor:'',proposalDate:'2026-11-05',asIs:'目前客戶詢價由業務人員透過電子郵件接收，人工整理產品需求、查詢價格資料，製作報價單，經主管確認後寄送客戶。',problems:'人工整理與查詢耗時，資料可能遺漏；主管審核前經常需要反覆修正。',toBe:'使用 AI 自動擷取詢價內容、查詢產品資訊並產生報價草稿，由業務人員確認後提交主管審核。',goal:'縮短報價處理時間、減少輸入錯誤，並提高客戶回覆速度。',currentTime:'65',futureTime:'25',frequency:'40',cost:'5000',resources:'業務人員每週投入 4 小時；IT 協助資料存取；AI 工具測試帳號。',notes:'',approval:'待主管審核',executiveApproval:'待核准',stages:[{title:'確認現況與基準',date:'2026-11-16',check:'現有流程、處理時間確認',status:'尚未檢查'},{title:'AI 原型測試',date:'2026-11-30',check:'測試 10 筆詢價，記錄準確率',status:'尚未檢查'},{title:'成果驗證與報告',date:'2026-12-14',check:'比較改善前後工時及品質',status:'尚未檢查'}]};
+let stages=[];const $=id=>document.getElementById(id);
+function stageRow(s={}){const tr=document.createElement('tr');for(const key of ['title','date','check','status']){const td=document.createElement('td');const el=document.createElement(key==='status'?'select':'input');if(key==='date')el.type='date';if(key==='status'){for(const v of ['尚未檢查','通過','需改善']){const o=document.createElement('option');o.value=v;o.textContent=v;el.append(o)}}el.value=s[key]||(key==='status'?'尚未檢查':'');el.dataset.key=key;el.addEventListener('input',syncStages);td.append(el);tr.append(td)}const td=document.createElement('td'),btn=document.createElement('button');btn.className='remove';btn.textContent='刪除';btn.onclick=()=>{tr.remove();syncStages()};td.append(btn);tr.append(td);$('stages').append(tr)}
+function syncStages(){stages=[...$('stages').rows].map(tr=>Object.fromEntries([...tr.querySelectorAll('[data-key]')].map(el=>[el.dataset.key,el.value])))}
+function load(data){fields.forEach(k=>$(k).value=data[k]??'');$('stages').replaceChildren();(data.stages||[]).forEach(stageRow);syncStages();calculate()}
+function collect(){syncStages();return {...Object.fromEntries(fields.map(k=>[k,$(k).value])),stages}}
+function calculate(){const a=Number($('currentTime').value),b=Number($('futureTime').value),f=Number($('frequency').value);$('saved').textContent=Number.isFinite(a-b)?`${a-b} 分鐘`:'—';$('hours').textContent=`${((a-b)*f*12/60).toLocaleString('zh-TW',{maximumFractionDigits:1})} 小時`}
+function message(s){$('message').textContent=s}
+fields.forEach(k=>$(k).addEventListener('input',calculate));
+$('add').onclick=()=>{stageRow();syncStages()};
+$('save').onclick=()=>{localStorage.setItem('smartCitizenPocV1',JSON.stringify(collect()));message('已儲存到本機瀏覽器。')};
+$('reset').onclick=()=>{if(confirm('重設為範例資料？未儲存的修改會遺失。')){load(sample);message('已重設範例。')}};
+$('diagram').onchange=()=>{$('diagramName').textContent=$('diagram').files[0]?.name||''};
+$('export').onclick=async()=>{try{const res=await fetch('/export',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(collect())});if(!res.ok)throw Error(await res.text());const blob=await res.blob(),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='智慧公民_AI專案提案.xlsx';a.click();setTimeout(()=>URL.revokeObjectURL(url),3000);message('Excel 已匯出。')}catch(e){message('匯出失敗：'+e.message)}};
+try{load(JSON.parse(localStorage.getItem('smartCitizenPocV1'))||sample)}catch{load(sample)}
